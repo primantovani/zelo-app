@@ -44,7 +44,7 @@ void main() {
     await tester.tap(find.text('Entrar'));
     await tester.pumpAndSettle();
     expect(find.text('Olá, Ana'), findsOneWidget);
-    expect(find.text('Buraco em frente à escola'), findsOneWidget);
+    expect(find.text('Vazamento na sarjeta'), findsOneWidget);
     expect(find.text('Em análise'), findsOneWidget);
   });
 

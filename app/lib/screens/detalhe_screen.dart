@@ -104,7 +104,10 @@ class _ConteudoState extends State<_Conteudo> {
     final jaApoiei = d.apoios.any((a) => a.idUsuario == idUsuario);
     final confirmacoes = d.apoios.where((a) => a.tipo == 'CONFIRMACAO').length;
     final fotosVisiveis = d.fotos
-        .where((f) => f.url.startsWith('http') || f.url.startsWith('blob:'))
+        .where((f) =>
+            f.url.startsWith('http') ||
+            f.url.startsWith('blob:') ||
+            f.url.startsWith('asset:'))
         .toList();
 
     return ListView(
@@ -150,11 +153,7 @@ class _ConteudoState extends State<_Conteudo> {
           const SizedBox(height: 16),
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.network(fotosVisiveis.first.url,
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => const SizedBox.shrink()),
+            child: _FotoOcorrencia(fotosVisiveis.first.url),
           ),
         ] else if (d.fotos.isNotEmpty)
           _Linha(Icons.photo_outlined, '${d.fotos.length} foto(s) anexada(s)'),
@@ -226,5 +225,26 @@ class _Linha extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+/// Foto da ocorrência: URL da API, imagem escolhida no aparelho (blob, na
+/// web) ou imagem embutida no app (`asset:`, usada no modo demonstração).
+class _FotoOcorrencia extends StatelessWidget {
+  const _FotoOcorrencia(this.url);
+
+  final String url;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget erro(BuildContext _, Object _, StackTrace? _) =>
+        const SizedBox.shrink();
+    return url.startsWith('asset:')
+        ? Image.asset(url.substring(6),
+            height: 200, width: double.infinity, fit: BoxFit.cover,
+            errorBuilder: erro)
+        : Image.network(url,
+            height: 200, width: double.infinity, fit: BoxFit.cover,
+            errorBuilder: erro);
   }
 }

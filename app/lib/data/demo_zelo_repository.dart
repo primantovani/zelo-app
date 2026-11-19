@@ -49,10 +49,11 @@ class DemoZeloRepository implements ZeloRepository {
         'O poste está apagado há uma semana e a rua fica escura à noite.',
         -23.5641, -46.6527, 'Av. Paulista, 1100 - Bela Vista',
         quando: agora.subtract(const Duration(days: 6)));
-    final id = _abrir(vizinha, 1, 'Buraco em frente à escola',
-        'Buraco grande na faixa da direita, carros desviam em cima da calçada.',
+    final id = _abrir(vizinha, 4, 'Vazamento na sarjeta',
+        'Água escorrendo pela sarjeta há dias, formando poça na esquina.',
         -23.5874, -46.6576, 'R. Domingos de Morais, 500 - Vila Mariana',
-        quando: agora.subtract(const Duration(days: 3)));
+        quando: agora.subtract(const Duration(days: 3)),
+        foto: 'asset:assets/demo/vazamento.jpg');
     _mudarStatus(id, StatusOcorrencia.emAnalise, 'Encaminhada para a subprefeitura.',
         agora.subtract(const Duration(days: 2)));
   }
