@@ -10,9 +10,9 @@ podem **apoiar** ou **confirmar** ocorrências, e o autor recebe **avisos** a ca
 
 | Parte | Responsável | Repositório |
 |---|---|---|
-| App Flutter (este repositório) | Priscila Mantovani | `zelo-app` |
-| API Spring Boot + Oracle + PL/SQL | Gabriel Notari | [Gabrielnotari/zelo-backend](https://github.com/Gabrielnotari/zelo-backend) |
-| Mapa, notificações push, PL/SQL de indicadores, documentação | Sophie Moreau | (a integrar) |
+| App Flutter | Priscila Mantovani | `app/` |
+| API Spring Boot + Oracle + PL/SQL | Gabriel Notari | `backend/` |
+| Mapa, notificações push, PL/SQL de indicadores, documentação | Sophie Moreau | `app/` e `backend/` |
 
 ## Funcionalidades
 
