@@ -3,6 +3,8 @@ package br.com.zelo.service;
 import br.com.zelo.dto.ApiDtos.*;
 import br.com.zelo.domain.*;
 import br.com.zelo.repository.*;
+import org.springframework.jdbc.core.CallableStatementCallback;
+import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +23,13 @@ public class OcorrenciaService {
     @Transactional
     public OcorrenciaCriadaResponse criar(CriarOcorrenciaRequest r) {
         final Long[] id={null}; final String[] protocolo={null};
-        jdbc.execute(con -> {
+        jdbc.execute((CallableStatementCreator) con -> {
             var cs=con.prepareCall("{call PRC_REGISTRAR_OCORRENCIA(?,?,?,?,?,?,?,?,?)}");
             cs.setLong(1,r.idUsuario()); cs.setLong(2,r.idCategoria()); cs.setString(3,r.titulo());
-            cs.setString(4,r.descricao()); cs.setDouble(5,r.latitude()); cs.setDouble(6,r.longitude());
+            cs.setString(4,r.descricao()); cs.setObject(5,r.latitude(),Types.NUMERIC); cs.setObject(6,r.longitude(),Types.NUMERIC);
             cs.setString(7,r.endereco()); cs.registerOutParameter(8,Types.NUMERIC); cs.registerOutParameter(9,Types.VARCHAR);
             return cs;
-        }, cs -> {cs.execute(); id[0]=cs.getLong(8); protocolo[0]=cs.getString(9); return null;});
+        }, (CallableStatementCallback<Void>) cs -> {cs.execute(); id[0]=cs.getLong(8); protocolo[0]=cs.getString(9); return null;});
         return new OcorrenciaCriadaResponse(id[0],protocolo[0],"Ocorrência registrada com sucesso.");
     }
     @Transactional(readOnly=true) public List<Ocorrencia> listar(){return ocorrencias.findAll();}
@@ -35,12 +37,12 @@ public class OcorrenciaService {
     @Transactional(readOnly=true) public List<Ocorrencia> minhas(Long idUsuario){return ocorrencias.findByIdUsuario(idUsuario);}
     @Transactional(readOnly=true) public Ocorrencia porProtocolo(String protocolo){return ocorrencias.findByProtocolo(protocolo).orElseThrow(()->new IllegalArgumentException("Protocolo não encontrado."));}
     @Transactional public void alterarStatus(Long id, AlterarStatusRequest r) {
-        jdbc.update(con -> {
+        jdbc.execute((CallableStatementCreator) con -> {
             var cs=con.prepareCall("{call PRC_ALTERAR_STATUS(?,?,?,?)}");
             cs.setLong(1,id); cs.setLong(2,r.idUsuario()); cs.setString(3,r.novoStatus());
             if(r.observacao()==null) cs.setNull(4,Types.VARCHAR); else cs.setString(4,r.observacao());
             return cs;
-        }, cs -> {cs.execute(); return null;});
+        }, (CallableStatementCallback<Void>) cs -> {cs.execute(); return null;});
     }
     @Transactional public FotoOcorrencia adicionarFoto(Long id, FotoRequest r) {
         buscar(id); FotoOcorrencia f=new FotoOcorrencia(); f.setIdOcorrencia(id); f.setUrlFoto(r.urlFoto()); return fotos.save(f);

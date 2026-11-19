@@ -30,6 +30,8 @@ management:
         include: health,info
 
 app:
+  cors:
+    origins: ${CORS_ORIGINS:http://localhost:*,http://127.0.0.1:*}
   jwt:
     # Troque por uma chave aleatória com pelo menos 32 caracteres.
     secret: ${JWT_SECRET:ZeloProjetoLocalDevSecretKey2026ChangeMe}

@@ -95,7 +95,12 @@ class _HomeScreenState extends State<HomeScreen> {
           : null,
       bottomNavigationBar: NavigationBar(
         selectedIndex: _aba,
-        onDestinationSelected: (i) => setState(() => _aba = i),
+        // Recarrega as listas ao trocar de aba: o status pode ter mudado
+        // no servidor (equipe de zeladoria) desde o último carregamento.
+        onDestinationSelected: (i) => setState(() {
+          _aba = i;
+          _versaoLista++;
+        }),
         destinations: [
           for (final a in abas)
             NavigationDestination(
