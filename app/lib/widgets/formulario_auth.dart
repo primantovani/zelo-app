@@ -34,7 +34,7 @@ class MolduraAuth extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: tema.textTheme.bodyLarge?.copyWith(
                           color: tema.colorScheme.onSurfaceVariant)),
-                  if (AppConfig.modoDemonstracao) ...[
+                  if (AppConfig.modoDemonstracao && !AppConfig.apresentacao) ...[
                     const SizedBox(height: 12),
                     const _AvisoDemonstracao(),
                   ],

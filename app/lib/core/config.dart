@@ -14,6 +14,10 @@ class AppConfig {
   /// Tempo máximo de espera de uma requisição antes de mostrar erro.
   static const Duration timeout = Duration(seconds: 20);
 
+  /// Esconde o aviso de modo demonstração (gravação de vídeo).
+  /// `--dart-define=APRESENTACAO=true`
+  static const bool apresentacao = bool.fromEnvironment('APRESENTACAO');
+
   /// `true` quando nenhuma API foi configurada.
   static bool get modoDemonstracao => apiUrl.isEmpty;
 }
